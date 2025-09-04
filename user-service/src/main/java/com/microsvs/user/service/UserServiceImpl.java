@@ -16,6 +16,7 @@ import com.microsvs.user.entity.Address;
 import com.microsvs.user.entity.Credential;
 import com.microsvs.user.entity.User;
 import com.microsvs.user.excepetion.UserAlreadyExists;
+import com.microsvs.user.excepetion.UserNotFound;
 import com.microsvs.user.repository.AddressRepository;
 import com.microsvs.user.repository.CredentialRepository;
 import com.microsvs.user.repository.UserReposotiry;
@@ -37,12 +38,12 @@ public class UserServiceImpl implements UserService {
 	public UserResponseDTO registerUser(UserRequestDTO userRequestDTO) {
 
 		if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
-	        throw new UserAlreadyExists("Email " + userRequestDTO.getEmail() + " already exists");
-	    }
-		
-	    if (userRepository.existsByPhone(userRequestDTO.getPhone())) {
-	        throw new UserAlreadyExists("Phone " + userRequestDTO.getPhone() + " already exists");
-	    }
+			throw new UserAlreadyExists("Email " + userRequestDTO.getEmail() + " already exists");
+		}
+
+		if (userRepository.existsByPhone(userRequestDTO.getPhone())) {
+			throw new UserAlreadyExists("Phone " + userRequestDTO.getPhone() + " already exists");
+		}
 
 		User user = modelMapper.map(userRequestDTO, User.class);
 		if (userRequestDTO.getAddresses() != null) {
@@ -72,8 +73,19 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDTO updateUser(String userId, UserRequestDTO userRequestDTO) {
-		// TODO Auto-generated method stub
-		return null;
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFound(String.format("User with id: %s does not exists", userId)));
+
+		user.setEmail(userRequestDTO.getEmail());
+		user.setFirstName(userRequestDTO.getFirstName());
+		user.setLastName(userRequestDTO.getLastName());
+		user.setPhone(userRequestDTO.getPhone());
+		
+		User save = userRepository.save(user);
+		UserResponseDTO map = modelMapper.map(save, UserResponseDTO.class);
+		
+		return map;
+
 	}
 
 	@Override
