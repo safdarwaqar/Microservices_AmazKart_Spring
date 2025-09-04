@@ -1,8 +1,10 @@
 package com.microsvs.user.service;
 
+import java.util.List;
+
+import com.microsvs.user.dto.CredentialRequestDTO;
 import com.microsvs.user.dto.UserRequestDTO;
 import com.microsvs.user.dto.UserResponseDTO;
-import java.util.List;
 
 public interface UserService {
 
@@ -16,6 +18,8 @@ public interface UserService {
     UserResponseDTO getUserById(String userId);
 
     List<UserResponseDTO> getAllUsers();
+    
+    UserResponseDTO updateCredentialByUserId(String userId, CredentialRequestDTO credentialRequestDTO);
 
    
 }
