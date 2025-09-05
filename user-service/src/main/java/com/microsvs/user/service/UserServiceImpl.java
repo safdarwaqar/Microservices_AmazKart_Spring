@@ -18,7 +18,9 @@ import com.microsvs.user.entity.Credential;
 import com.microsvs.user.entity.User;
 import com.microsvs.user.excepetion.UserAlreadyExists;
 import com.microsvs.user.excepetion.UserNotFound;
-import com.microsvs.user.repository.UserReposotiry;
+import com.microsvs.user.repository.AddressRepository;
+import com.microsvs.user.repository.CredentialRepository;
+
 
 @Service
 @Transactional
@@ -72,8 +74,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDTO updateUser(String userId, UserRequestDTO userRequestDTO) {
-
+    
 		User user = findUserIfExists(userId);
+
 		user.setEmail(userRequestDTO.getEmail());
 		user.setFirstName(userRequestDTO.getFirstName());
 		user.setLastName(userRequestDTO.getLastName());
@@ -81,8 +84,8 @@ public class UserServiceImpl implements UserService {
 
 		User savedUser = userRepository.save(user);
 		UserResponseDTO map = modelMapper.map(savedUser, UserResponseDTO.class);
-		return map;
-
+    
+    return map;
 	}
 
 	@Override
