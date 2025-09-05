@@ -10,11 +10,11 @@ spring:
             webflux:
                routes:
                -  id: inventory-service
-                  uri: http://localhost:8082 # ✅ service discovery version
+                  uri: lb://INVENTORY-SERVICE # ✅ service discovery version
                   predicates:
                   - Path=/api/v1/inventory/**
 
                -  id: user-service
-                  uri: http://localhost:8081 # ✅ service discovery version
+                  uri: lb://USER-SERVICE # ✅ service discovery version
                   predicates:
                   - Path=/api/users**
