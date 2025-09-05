@@ -60,3 +60,4 @@ Thumbs.db
 # Ignore IntelliJ metadata inside every service
 */.idea/
 */*.iml
+/.metadata
