@@ -18,8 +18,7 @@ import com.microsvs.user.entity.Credential;
 import com.microsvs.user.entity.User;
 import com.microsvs.user.excepetion.UserAlreadyExists;
 import com.microsvs.user.excepetion.UserNotFound;
-import com.microsvs.user.repository.AddressRepository;
-import com.microsvs.user.repository.CredentialRepository;
+import com.microsvs.user.repository.UserReposotiry;
 
 
 @Service
