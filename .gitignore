@@ -23,6 +23,10 @@
 hs_err_pid*
 replay_pid*
 .metadata/
+
+/api-gateway/bin
+/eureka-service/bin
+
 inventory-service/.classpath
 inventory-service/.factorypath
 inventory-service/.project
@@ -30,7 +34,3 @@ inventory-service/.settings/org.eclipse.core.resources.prefs
 inventory-service/.settings/org.eclipse.jdt.apt.core.prefs
 inventory-service/.settings/org.eclipse.jdt.core.prefs
 inventory-service/.settings/org.eclipse.m2e.core.prefs
-inventory-service/bin/target/classes/application.yml
-inventory-service/bin/target/classes/META-INF/MANIFEST.MF
-inventory-service/bin/target/classes/META-INF/maven/com.safdar/inventory-service/pom.properties
-inventory-service/bin/target/classes/META-INF/maven/com.safdar/inventory-service/pom.xml

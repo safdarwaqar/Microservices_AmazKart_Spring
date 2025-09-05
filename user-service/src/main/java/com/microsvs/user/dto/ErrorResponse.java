@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class ErrorResponse {
 	private int status; // HTTP status code (e.g., 404, 500)
 
