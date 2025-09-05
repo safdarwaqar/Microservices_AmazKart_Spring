@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.microsvs.user.dto.AddressResponseDTO;
+import com.microsvs.user.dto.CredentialRequestDTO;
 import com.microsvs.user.dto.UserRequestDTO;
 import com.microsvs.user.dto.UserResponseDTO;
 import com.microsvs.user.entity.Address;
@@ -19,7 +20,7 @@ import com.microsvs.user.excepetion.UserAlreadyExists;
 import com.microsvs.user.excepetion.UserNotFound;
 import com.microsvs.user.repository.AddressRepository;
 import com.microsvs.user.repository.CredentialRepository;
-import com.microsvs.user.repository.UserReposotiry;
+
 
 @Service
 @Transactional
@@ -27,12 +28,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserReposotiry userRepository;
-	@Autowired
-	private AddressRepository addressRepository;
-	@Autowired
-	private CredentialRepository credentialRepository;
+
 	@Autowired
 	private ModelMapper modelMapper;
+
+//	@Autowired
+//	private CredentialRepository credentialRepository;
 
 	@Override
 	public UserResponseDTO registerUser(UserRequestDTO userRequestDTO) {
@@ -73,37 +74,52 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDTO updateUser(String userId, UserRequestDTO userRequestDTO) {
-		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new UserNotFound(String.format("User with id: %s does not exists", userId)));
+    
+		User user = findUserIfExists(userId);
 
 		user.setEmail(userRequestDTO.getEmail());
 		user.setFirstName(userRequestDTO.getFirstName());
 		user.setLastName(userRequestDTO.getLastName());
 		user.setPhone(userRequestDTO.getPhone());
-		
-		User save = userRepository.save(user);
-		UserResponseDTO map = modelMapper.map(save, UserResponseDTO.class);
-		
-		return map;
 
+		User savedUser = userRepository.save(user);
+		UserResponseDTO map = modelMapper.map(savedUser, UserResponseDTO.class);
+    
+    return map;
 	}
 
 	@Override
 	public void deleteUser(String userId) {
-		// TODO Auto-generated method stub
-
+		userRepository.delete(findUserIfExists(userId));
 	}
 
 	@Override
 	public UserResponseDTO getUserById(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return modelMapper.map(findUserIfExists(userId), UserResponseDTO.class);
 	}
 
 	@Override
 	public List<UserResponseDTO> getAllUsers() {
+		return userRepository.findAll().stream().map(users -> modelMapper.map(users, UserResponseDTO.class)).toList();
+	}
+
+	@Override
+	public UserResponseDTO updateCredentialByUserId(String userId, CredentialRequestDTO credentialRequestDTO) {
 		// TODO Auto-generated method stub
-		return null;
+		User user = findUserIfExists(userId);
+		Credential map = modelMapper.map(credentialRequestDTO, Credential.class);
+		map.setCreatedAt(user.getCredential().getCreatedAt());
+		map.setUser(user);
+		map.setCredentialId(user.getCredential().getCredentialId());
+		user.setCredential(map);
+		User save = userRepository.save(user);
+
+		return modelMapper.map(save, UserResponseDTO.class);
+	}
+
+	private User findUserIfExists(String user_id) {
+		return userRepository.findById(user_id)
+				.orElseThrow(() -> new UserNotFound(String.format("user with user_id: %s does not exists", user_id)));
 	}
 
 }

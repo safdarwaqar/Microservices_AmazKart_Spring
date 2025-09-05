@@ -1,5 +1,6 @@
 package com.microsvs.user.controller;
 
+import com.microsvs.user.dto.CredentialRequestDTO;
 import com.microsvs.user.dto.UserRequestDTO;
 import com.microsvs.user.dto.UserResponseDTO;
 import com.microsvs.user.service.UserService;
@@ -29,6 +30,14 @@ public class UserController {
             @PathVariable String id,
             @Valid @RequestBody UserRequestDTO dto) {
         return ResponseEntity.ok(userService.updateUser(id, dto));
+    }
+    
+ // ========== Update User Credential ==========
+    @PutMapping("credential/{id}")
+    public ResponseEntity<UserResponseDTO> updateUserCredentialById(
+            @PathVariable String id,
+            @Valid @RequestBody CredentialRequestDTO dto) {
+        return ResponseEntity.ok(userService.updateCredentialByUserId(id, dto));
     }
 
     // ========== Delete ==========
