@@ -23,5 +23,14 @@
 hs_err_pid*
 replay_pid*
 .metadata/
+
 /api-gateway/bin
 /eureka-service/bin
+
+inventory-service/.classpath
+inventory-service/.factorypath
+inventory-service/.project
+inventory-service/.settings/org.eclipse.core.resources.prefs
+inventory-service/.settings/org.eclipse.jdt.apt.core.prefs
+inventory-service/.settings/org.eclipse.jdt.core.prefs
+inventory-service/.settings/org.eclipse.m2e.core.prefs

@@ -1,0 +1,20 @@
+server:
+   port: 9900
+
+spring:
+   application:
+      name: api-gateway
+   cloud:
+      gateway:
+         server:
+            webflux:
+               routes:
+               -  id: inventory-service
+                  uri: lb://INVENTORY-SERVICE # ✅ service discovery version
+                  predicates:
+                  - Path=/api/v1/inventory/**
+
+               -  id: user-service
+                  uri: lb://USER-SERVICE # ✅ service discovery version
+                  predicates:
+                  - Path=/api/users**
