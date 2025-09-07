@@ -61,3 +61,5 @@ Thumbs.db
 */.idea/
 */*.iml
 /.metadata
+cart-service/HELP.md
+product-service/HELP.md
