@@ -17,4 +17,19 @@ spring:
                -  id: user-service
                   uri: lb://USER-SERVICE # ✅ service discovery version
                   predicates:
-                  - Path=/api/users**
+                  - Path=/api/users/**
+                  
+               -  id: product-service-products
+                  uri: lb://PRODUCT-SERVICE # ✅ service discovery version
+                  predicates:
+                  - Path=/api/products/**
+                  
+               -  id: product-service-categories
+                  uri: lb://PRODUCT-SERVICE # ✅ service discovery version
+                  predicates:
+                  - Path=/api/categories/**                  
+               
+               -  id: cart-service
+                  uri: lb://CART-SERVICE # ✅ service discovery version
+                  predicates:
+                  - Path=/api/cart/**
