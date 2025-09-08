@@ -1,7 +1,6 @@
 package com.microsvs.inventory.entity;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,11 +19,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class InventoryItem {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@Column(nullable = false, unique = true)
-	private UUID productId;
+	private Long productId;
 
 	@Column(nullable = false)
 	private int quantity;
