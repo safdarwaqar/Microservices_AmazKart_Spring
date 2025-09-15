@@ -1,8 +1,6 @@
 package com.microsvs.inventory.service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +19,8 @@ public class InventoryService {
 	private InventoryRepository inventoryRepository;
 
 	public InventoryResponseDTO addInventory(InventoryRequestDTO requestDTO) {
-		Optional<InventoryItem> existing = inventoryRepository.findByProductId(requestDTO.getProductId());
 
-		if (existing.isPresent()) {
+		if (inventoryRepository.findByProductId(requestDTO.getProductId()).isPresent()) {
 			throw new IllegalArgumentException("Inventory already exists for productId: " + requestDTO.getProductId());
 		}
 
@@ -42,13 +39,13 @@ public class InventoryService {
 				.collect(Collectors.toList());
 	}
 
-	public InventoryResponseDTO getStock(UUID productId) {
+	public InventoryResponseDTO getStock(Long productId) {
 		InventoryItem item = inventoryRepository.findByProductId(productId)
 				.orElseThrow(() -> new ResourceNotFoundException("Inventory not found for productId: " + productId));
 		return mapToDTO(item);
 	}
 
-	public InventoryResponseDTO updateStock(UUID productId, int quantity) {
+	public InventoryResponseDTO updateStock(Long productId, int quantity) {
 		InventoryItem item = inventoryRepository.findByProductId(productId)
 				.orElseThrow(() -> new ResourceNotFoundException("Inventory not found for productId: " + productId));
 		item.setQuantity(quantity);

@@ -1,7 +1,6 @@
 package com.microsvs.inventory.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,13 +28,13 @@ public class InventoryController {
 	private InventoryService inventoryService;
 
 	@GetMapping("/{productId}")
-	public ResponseEntity<InventoryResponseDTO> getInventory(@PathVariable UUID productId) {
+	public ResponseEntity<InventoryResponseDTO> getInventory(@PathVariable Long productId) {
 		InventoryResponseDTO responseDTO = inventoryService.getStock(productId);
 		return ResponseEntity.ok(responseDTO);
 	}
 
 	@PutMapping("/{productId}")
-	public ResponseEntity<InventoryResponseDTO> updateInventory(@PathVariable UUID productId,
+	public ResponseEntity<InventoryResponseDTO> updateInventory(@PathVariable Long productId,
 			@RequestParam int quantity) {
 		InventoryResponseDTO responseDTO = inventoryService.updateStock(productId, quantity);
 		return ResponseEntity.ok(responseDTO);

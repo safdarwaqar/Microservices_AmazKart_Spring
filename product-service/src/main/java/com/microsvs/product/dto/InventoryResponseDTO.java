@@ -1,4 +1,4 @@
-package com.microsvs.inventory.dto;
+package com.microsvs.product.dto;
 
 import java.time.LocalDateTime;
 

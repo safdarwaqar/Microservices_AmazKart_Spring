@@ -1,7 +1,5 @@
 package com.microsvs.inventory.dto;
 
-import java.util.UUID;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -11,9 +9,9 @@ import lombok.Data;
 @Builder
 public class InventoryRequestDTO {
 	@NotNull
-	private UUID productId;
+	private Long productId;
 
-	@Min(0)
+	@Min(1)
 	private int quantity;
 
 	private int threshold;
