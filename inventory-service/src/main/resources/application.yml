@@ -6,11 +6,11 @@ spring:
     name: inventory-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/inventory_service_db?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/inventory_service_db?allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  
   jpa:
     hibernate:
       ddl-auto: update # (options: none, validate, update, create, create-drop)
@@ -35,6 +35,18 @@ spring:
     listener:
       missing-topics-fatal: false
 
+  management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+
 eureka:
   client:
     register-with-eureka: true
@@ -43,4 +55,4 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     prefer-ip-address: true
-    hostname: localhost
+    hostname: eureka-service

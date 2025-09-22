@@ -1,5 +1,54 @@
 version: "3.9"
+
 services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - app-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - app-network
+
+  eureka-service:
+    build: ./eureka-service
+    ports:
+      - "8761:8761"
+    networks:
+      - app-network
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "9900:9900"
+    networks:
+      - app-network
+
   product-service:
     build: ./product-service
     ports:
@@ -8,6 +57,12 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/product_service_db
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_EUREKA_SERVER_URL: http://eureka-service:8761/eureka/
+    depends_on:
+      - mysql
+      - kafka
+      - eureka-service
     networks:
       - app-network
 
@@ -19,28 +74,45 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/user_service_db
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      - mysql
+      - kafka
+      - eureka-service
     networks:
       - app-network
 
-  eureka-service:
-    build: ./eureka-service
+  inventory-service:
+    build: ./inventory-service
     ports:
-      - "8761:8761"
-    networks:
-      - app-network
-
-  mysql:
-    image: mysql
-    ports:
-      - "3307:3306"
+      - "8082:8082"
     environment:
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-    - ./mysql-init:/docker-entrypoint-initdb.d
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/inventory_service_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      - mysql
+      - kafka
+      - eureka-service
     networks:
       - app-network
 
-  
+  cart-service:
+    build: ./cart-service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/cart_service_db
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      - mysql
+      - kafka
+      - eureka-service
+    networks:
+      - app-network
 
 
 networks:
