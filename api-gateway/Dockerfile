@@ -1,3 +1,4 @@
+# This is a docker file, used to create docker-image after the maven package is run
 # Use Maven to build the JAR
 FROM maven:3.9.4-eclipse-temurin-17 AS build
 WORKDIR /app
